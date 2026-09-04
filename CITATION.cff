@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "If you use this code, please cite it as below."
+title: "doa-analysis-py: analysis code for 'Denial of Access as an Unmeasured Outcome in Nonprescription Statin Self-Selection Studies'"
+authors:
+  - family-names: "Molinari"
+    given-names: "Kyle P."
+    affiliation: "Krafted Therapeutics, Inc."
+version: "1.0"
+date-released: "2026-09-04"
+license: MIT
+repository-code: "https://github.com/kmolinari-source/doa-analysis-py"
+keywords:
+  - nonprescription drugs
+  - self-selection studies
+  - statins
+  - diagnostic accuracy
+  - decision curve analysis

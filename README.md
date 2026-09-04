@@ -14,9 +14,9 @@ Therapeutic Innovation & Regulatory Science).
   mitigation counts, and screening-flow arithmetic) from numerical inputs
   transcribed from the cited sources, and asserts equality with the
   manuscript's reported values at reported precision. A clean run prints
-  `ALL 43 ASSERTIONS PASSED`.
+  `ALL 57 ASSERTIONS PASSED`.
 - `make_figure.py` — generates Figure 4 (decision curves) as
-  `figure4_decision_curves.png`.
+  `figure2_decision_curves.png`.
 
 ## Requirements
 
@@ -29,10 +29,8 @@ which the reported values were certified.
     python analysis.py
     python make_figure.py
 
-`analysis.py` exits nonzero on the first failed assertion. One check is
-marked SKIP pending one input (the correct-selection component count of the
-TACTiC first co-primary endpoint); enter it as `TACTIC_CORRECT_SELECTORS`
-when confirmed against the publication's outcomes table.
+`analysis.py` exits nonzero on the first failed assertion. Endpoint
+component counts are those printed in Table 2 of the TACTiC publication.
 
 The bootstrap uses 200,000 multinomial resamples with a fixed seed
 (20260826); a 5,000,000-resample reference run (seed 42) gives

@@ -214,18 +214,56 @@ check("36.6% untreated = complement of 63.4% treated (ref 3)",
 
 print()
 print("=" * 72)
-print("PENDING INPUT (assertion skipped, not failed)")
+print("Section 8. TACTiC endpoint components (ref 22, Table 2, p. 2084)")
 print("=" * 72)
-print("  [SKIP] Null classifier floor for TACTiC ('at least 80.3%'):")
-print("         requires the correct-selection component count of the first")
-print("         co-primary endpoint from the ref 22 outcomes table. Enter it")
-print("         as TACTIC_CORRECT_SELECTORS below when confirmed; the floor")
-print("         is then that count / 1,196, reported as a lower bound.")
-TACTIC_CORRECT_SELECTORS = None
-if TACTIC_CORRECT_SELECTORS is not None:
-    floor = 100 * TACTIC_CORRECT_SELECTORS / 1196
-    check("TACTiC null-classifier floor >= 80.3%", round(floor, 1) >= 80.3,
-          f"{floor:.1f}%")
+# Components of the co-primary outcomes as printed in the publication's
+# Table 2. These independently confirm the manuscript's derived unmitigated
+# numerators (1,007 and 934), which the publication does not report as
+# figures but whose components it prints.
+CS1, CAAD1, MIT1, INC1 = 960, 47, 78, 111            # first endpoint, N = 1,196
+CS2, CAAD2, CDNU2, MIT2, INC2 = 836, 14, 84, 198, 22  # second endpoint, n = 1,154
+check("First endpoint: 960 + 47 = 1,007 (unmitigated numerator)",
+      CS1 + CAAD1 == 1007)
+check("First endpoint: 1,007 + 78 mitigated = 1,085", CS1 + CAAD1 + MIT1 == 1085)
+check("First endpoint accounting: 1,085 + 111 incorrect = 1,196",
+      CS1 + CAAD1 + MIT1 + INC1 == 1196)
+check("Second endpoint: 836 + 14 + 84 = 934 (unmitigated numerator)",
+      CS2 + CAAD2 + CDNU2 == 934)
+check("Second endpoint: 934 + 198 mitigated = 1,132",
+      CS2 + CAAD2 + CDNU2 + MIT2 == 1132)
+check("Second endpoint accounting: 1,132 + 22 incorrect = 1,154",
+      CS2 + CAAD2 + CDNU2 + MIT2 + INC2 == 1154)
+# Null classifier floor: a rule returning "OK to use" to every participant
+# agrees with the clinician wherever the clinician outcome was "OK to Use",
+# which is at least the concordant count of 960; 960/1,196 = 80.27%,
+# reported in the manuscript at printed precision as "at least 80.3%".
+floor = 100 * CS1 / 1196
+check("Null classifier floor >= 960/1,196, printed as 80.3%",
+      round(floor, 1) == 80.3, f"{floor:.2f}%")
+
+
+# ---------------------------------------------------------------------------
+# Registry-vs-publication warning-concordance values quoted in Section 4.5
+# ---------------------------------------------------------------------------
+check("Registry do-not-use concordance 46/59 = 78.0%", round(100 * 46 / 59, 1) == 78.0)
+check("Publication do-not-use concordance 47/59 = 79.7%", round(100 * 47 / 59, 1) == 79.7)
+check("Registry ask-a-doctor concordance 23/25 = 92.0%", round(100 * 23 / 25, 1) == 92.0)
+check("Publication ask-a-doctor concordance 20/24 = 83.3%", round(100 * 20 / 24, 1) == 83.3)
+
+# ---------------------------------------------------------------------------
+# Decision-curve prevalence sensitivity quoted in Section 4.5:
+# crossover vs unscreened access as a function of eligible prevalence,
+# holding sensitivity (23/39) and specificity (458/461) fixed.
+# ---------------------------------------------------------------------------
+_sens, _spec = 23 / 39, 458 / 461
+def _crossover(pi):
+    w = pi * (1 - _sens) / ((1 - pi) * _spec)
+    return w / (1 + w)
+check("Crossover vs unscreened access at sample prevalence 7.8% = 3.38%",
+      round(100 * _crossover(39 / 500), 2) == 3.38)
+check("Crossover reaches the 5% band floor near 11.3% prevalence",
+      round(100 * _crossover(0.113), 2) == 5.00 or abs(_crossover(0.113) - 0.05) < 0.0005)
+check("Crossover at 15% prevalence = 6.79%", round(100 * _crossover(0.15), 2) == 6.79)
 
 print()
 print("=" * 72)
